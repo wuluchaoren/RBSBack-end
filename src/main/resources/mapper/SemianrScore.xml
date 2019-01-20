@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.SeminarScoreMapper">
+    <resultMap id="tab_seminar_score" type="com.rbs.project.pojo.entity.SeminarScore">
+        <result column="klass_seminar_id" property="cClassSeminarId"/>
+        <result column="team_id" property="teamId"/>
+        <result column="total_score" property="totalScore"/>
+        <result column="presentation_score" property="presentationScore"/>
+        <result column="question_score" property="questionScore"/>
+        <result column="report_score" property="reportScore"/>
+    </resultMap>
+
+    <select id="getBySeminarIdAndCClassIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT klass_seminar_id,team_id,total_score,presentation_score,question_score,report_score
+        FROM seminar_score LEFT JOIN klass_seminar
+        ON seminar_score.klass_seminar_id = klass_seminar.id
+        WHERE klass_seminar.seminar_id=#{seminarId} AND klass_seminar.klass_id=#{classId} AND seminar_score.team_id=#{teamId}
+    </select>
+
+    <select id="listAllBySeminarIdAndCClassId" resultMap="tab_seminar_score">
+        SELECT klass_seminar_id,team_id,total_score,presentation_score,question_score,report_score
+        FROM seminar_score LEFT JOIN klass_seminar
+        ON seminar_score.klass_seminar_id = klass_seminar.id
+        WHERE klass_seminar.seminar_id=#{seminarId} AND klass_seminar.klass_id=#{classId}
+    </select>
+
+    <select id="findByRoundIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT seminar_score.*
+        FROM seminar_score LEFT JOIN klass_seminar
+        ON seminar_score.klass_seminar_id=klass_seminar.id
+        LEFT JOIN seminar
+        ON klass_seminar.seminar_id=seminar.id
+        WHERE seminar.round_id=#{roundId} AND seminar_score.team_id=#{teamId}
+    </select>
+
+    <select id="findByClassSeminarIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT seminar_score.*
+        FROM seminar_score
+        WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
+    </select>
+
+    <select id="findBySeminarIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT seminar_score.*
+	    FROM seminar_score LEFT JOIN klass_seminar
+	      ON seminar_score.klass_seminar_id = klass_seminar.id
+	    WHERE klass_seminar.seminar_id=#{seminarId} AND seminar_score.team_id=#{teamId};
+    </select>
+
+    <insert id="insertSeminarScore">
+        INSERT INTO seminar_score(klass_seminar_id, team_id)
+        VALUES (#{cClassSeminarId},#{teamId})
+    </insert>
+
+    <delete id="deleteSeminarScoreByPrimaryKey">
+        DELETE FROM seminar_score
+        WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
+    </delete>
+
+    <update id="updatePresentationScore">
+        UPDATE seminar_score SET presentation_score=#{presentationScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
+
+    <update id="updateReportScore">
+        UPDATE seminar_score SET report_score=#{reportScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
+
+    <update id="updateQuestionScore">
+        UPDATE seminar_score SET question_score=#{questionScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
+
+    <update id="updateTotalScore">
+        UPDATE seminar_score SET total_score=#{totalScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
+
+    <delete id="deleteByTeamId">
+        delete from seminar_score
+        where team_id=#{teamId}
+    </delete>
+
+    <delete id="deleteByCClassSeminarId" parameterType="Long">
+        delete
+        from seminar_score
+        where klass_seminar_id=#{cClassSeminarId}
+    </delete>
+</mapper>

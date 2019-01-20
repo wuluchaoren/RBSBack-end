@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.TeacherMapper">
+    <resultMap id="tab_teacher" type="com.rbs.project.pojo.entity.Teacher">
+        <result property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="active" column="is_active"/>
+        <result property="teacherName" column="teacher_name"/>
+        <result property="email" column="email"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_teacher">
+        SELECT id,account,password,is_active,teacher_name,email FROM teacher WHERE id = #{id}
+    </select>
+
+    <select id="findByAccount" parameterType="String" resultMap="tab_teacher">
+        SELECT id,account,password,is_active,teacher_name,email FROM teacher WHERE account = #{account}
+    </select>
+
+    <select id="listAll" resultMap="tab_teacher">
+        SELECT id,account,password,is_active,teacher_name,email FROM teacher
+    </select>
+
+    <select id="findByTeacherName" resultMap="tab_teacher">
+        SELECT id,account,password,is_active,teacher_name,email FROM teacher WHERE teacher_name=#{teacherName}
+    </select>
+
+    <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET password=#{password},email=#{email},is_active=#{active}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updatePasswordById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET password=#{password}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateEmailById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET email=#{email}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="insertTeacher" parameterType="com.rbs.project.pojo.entity.Teacher" useGeneratedKeys="true" keyProperty="id">
+        insert into teacher(id,account,password,is_active,teacher_name,email)
+        values (#{id},#{account},#{password},#{active},#{teacherName},#{email})
+    </insert>
+
+    <update id="updateTeacherNameById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET teacher_name=#{teacherName}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateAccountById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET account=#{account}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteTeacherById" parameterType="Long">
+        DELETE FROM teacher WHERE id=#{id}
+    </delete>
+</mapper>

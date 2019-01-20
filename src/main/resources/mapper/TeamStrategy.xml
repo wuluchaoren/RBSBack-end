@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.strategy.TeamStrategyMapper">
+    <resultMap id="tab_team_strategy" type="com.rbs.project.pojo.strategy.TeamStrategy">
+        <result property="courseId" column="course_id"/>
+        <result property="strategySerial" column="strategy_serial"/>
+        <result property="strategyName" column="strategy_name"/>
+        <result property="strategyId" column="strategy_id"/>
+    </resultMap>
+
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_team_strategy">
+        SELECT * FROM team_strategy WHERE course_id=#{courseId}
+    </select>
+
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.TeamStrategy">
+        INSERT INTO team_strategy(course_id, strategy_serial, strategy_name, strategy_id)
+        VALUES (#{courseId},#{strategySerial},#{strategyName},#{strategyId})
+    </insert>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.strategy.TeamOrStrategyMapper">
+    <resultMap id="tab_team_or_strategy" type="com.rbs.project.pojo.strategy.TeamOrStrategy">
+        <result property="id" column="id"/>
+        <result property="strategyName" column="strategy_name"/>
+        <result property="strategyId" column="strategy_id"/>
+    </resultMap>
+
+    <select id="findMaxId" resultType="Long">
+        SELECT max(id) FROM team_or_strategy;
+    </select>
+
+    <select id="findById" parameterType="Long" resultMap="tab_team_or_strategy">
+        SELECT * FROM team_or_strategy WHERE id=#{id}
+    </select>
+
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.TeamOrStrategy">
+        INSERT INTO team_or_strategy(id, strategy_name, strategy_id)
+        VALUES (#{id},#{strategyName},#{strategyId})
+    </insert>
+
+</mapper>

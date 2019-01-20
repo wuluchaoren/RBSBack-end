@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CClassRoundMapper">
+    <resultMap id="tab_klass_round" type="com.rbs.project.pojo.relationship.CClassRound">
+        <result property="cClassId" column="klass_id"/>
+        <result property="roundId" column="round_id"/>
+        <result property="enrollNumber" column="enroll_number"/>
+    </resultMap>
+
+    <select id="findByPrimaryKeys" parameterType="Long" resultMap="tab_klass_round" resultType="com.rbs.project.pojo.relationship.CClassRound">
+        SELECT klass_id,round_id,enroll_number
+        FROM klass_round
+        WHERE klass_id=#{cClassId}
+          AND round_id=#{roundId}
+    </select>
+
+    <select id="findByRoundIdAndTeamId" resultMap="tab_klass_round">
+      SELECT klass_round.*
+	  FROM klass_round LEFT JOIN klass_team
+	  ON klass_round.klass_id=klass_team.klass_id
+	  WHERE klass_round.round_id=#{roundId} and klass_team.team_id=#{teamId};
+    </select>
+
+    <insert id="insertCClassRound" parameterType="com.rbs.project.pojo.relationship.CClassRound">
+        insert into klass_round(klass_id, round_id, enroll_number)
+        VALUES (#{cClassId},#{roundId},#{enrollNumber})
+    </insert>
+
+    <update id="updateEnrollNumber" parameterType="com.rbs.project.pojo.relationship.CClassRound">
+        update klass_round
+        set enroll_number=#{enrollNumber}
+        where klass_id=#{cClassId}
+          and round_id=#{roundId}
+    </update>
+
+    <select id="findByRoundId" parameterType="Long">
+        select klass_id,round_id,enroll_number
+        from klass_round
+        where round_id=#{roundId}
+    </select>
+
+    <delete id="deleteByPrimaryKeys">
+        delete
+        from klass_round
+        where klass_id=#{cClassId}
+          and round_id=#{roundId}
+    </delete>
+</mapper>

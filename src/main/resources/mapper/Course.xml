@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CourseMapper">
+    <resultMap id="tab_course" type="com.rbs.project.pojo.entity.Course">
+        <result property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="name" column="course_name"/>
+        <result property="intro" column="introduction"/>
+        <result property="presentationPercentage" column="presentation_percentage"/>
+        <result property="questionPercentage" column="question_percentage"/>
+        <result property="reportPercentage" column="report_percentage"/>
+        <result property="teamStartTime" column="team_start_time"/>
+        <result property="teamEndTime" column="team_end_time"/>
+        <result property="teamMainCourseId" column="team_main_course_id"/>
+        <result property="seminarMainCourseId" column="seminar_main_course_id"/>
+    </resultMap>
+    <select id="findById" parameterType="Long" resultMap="tab_course">
+        SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByCClassId" parameterType="Long" resultMap="tab_course">
+        SELECT course.*
+        FROM course LEFT JOIN klass
+        ON course.id=klass.course_id
+        WHERE klass.id=#{cClassId}
+    </select>
+
+    <select id="findByTeacherId" parameterType="Long" resultMap="tab_course"
+            resultType="com.rbs.project.pojo.entity.Course">
+        SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course
+        WHERE teacher_id = #{teacherId}
+    </select>
+
+    <select id="findByStudentId" parameterType="Long" resultMap="tab_course"
+            resultType="com.rbs.project.pojo.entity.Course">
+        SELECT course.id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course LEFT JOIN klass_student
+          ON course.id=klass_student.course_id
+        LEFT JOIN student
+          ON klass_student.student_id=student.id
+        WHERE student.id=#{studentId}
+    </select>
+
+    <select id="listAllCourse" resultMap="tab_course">
+        SELECT course.id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course
+    </select>
+
+    <select id="findAllConflictCourseByNowCourseId" resultMap="tab_course">
+        SELECT course.id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course LEFT JOIN conflict_course_strategy c1
+        ON course.id=c1.course_id
+        LEFT JOIN conflict_course_strategy c2
+        ON c1.id=c2.id
+        WHERE c2.course_id=#{nowCourseId}
+    </select>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE
+        FROM course
+        WHERE id=#{id}
+    </delete>
+
+    <insert id="insertCourse" parameterType="com.rbs.project.pojo.entity.Course" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO
+        course(teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id)
+        VALUE
+        (#{teacherId},#{name},#{intro},#{presentationPercentage},#{questionPercentage},
+        #{reportPercentage},#{teamStartTime},#{teamEndTime},#{teamMainCourseId},#{seminarMainCourseId})
+    </insert>
+
+    <update id="updateTeamMainCourseId" parameterType="com.rbs.project.pojo.entity.Course">
+        update course
+        set team_main_course_id=#{teamMainCourseId}
+        where id=#{id}
+    </update>
+
+    <update id="updateSeminarMainCourseId" parameterType="com.rbs.project.pojo.entity.Course">
+        update course
+        set seminar_main_course_id=#{seminarMainCourseId}
+        where id=#{id}
+    </update>
+
+    <select id="findBySeminarMainCourseId" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+      select id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+      from course
+      where seminar_main_course_id=#{seminarMainCourseId}
+    </select>
+
+    <select id="findByTeamMainCourseId" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+      select id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+      from course
+      where team_main_course_id=#{teamMainCourseId}
+    </select>
+</mapper>

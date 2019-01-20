@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.ShareSeminarApplicationMapper">
+    <resultMap id="tab_share_seminar_application" type="com.rbs.project.pojo.entity.ShareSeminarApplication">
+        <result property="id" column="id"/>
+        <result property="mainCourseId" column="main_course_id"/>
+        <result property="subCourseId" column="sub_course_id"/>
+        <result property="subCourseTeacherId" column="sub_course_teacher_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <select id="findById" parameterType="Long" resultMap="tab_share_seminar_application" resultType="com.rbs.project.pojo.entity.ShareSeminarApplication">
+        select id,main_course_id,sub_course_id,sub_course_teacher_id,status
+        from share_seminar_application
+        where id=#{id}
+    </select>
+
+    <select id="findByMainCourseId" parameterType="Long" resultMap="tab_share_seminar_application" resultType="com.rbs.project.pojo.entity.ShareSeminarApplication">
+        select id,main_course_id,sub_course_id,sub_course_teacher_id,status
+        from share_seminar_application
+        where main_course_id=#{mainCourseId}
+    </select>
+
+    <select id="findBySubCourseId" parameterType="Long" resultMap="tab_share_seminar_application" resultType="com.rbs.project.pojo.entity.ShareSeminarApplication">
+        select id,main_course_id,sub_course_id,sub_course_teacher_id,status
+        from share_seminar_application
+        where sub_course_id=#{subCourseId}
+    </select>
+
+    <delete id="deleteByCourseId" parameterType="Long">
+        DELETE FROM share_seminar_application
+        WHERE main_course_id=#{courseId} OR sub_course_id=#{courseId}
+    </delete>
+
+    <update id="updateStatusById">
+        update share_seminar_application
+        set status=#{status}
+        where id=#{id}
+    </update>
+
+    <insert id="addShareSeminarApplication" parameterType="com.rbs.project.pojo.entity.ShareSeminarApplication" useGeneratedKeys="true" keyProperty="id">
+        insert into share_seminar_application(main_course_id,sub_course_id,sub_course_teacher_id,status)
+        values (#{mainCourseId},#{subCourseId},#{subCourseTeacherId},#{status})
+    </insert>
+
+    <delete id="deleteSeminarShareApplication" parameterType="Long">
+        delete
+        from share_seminar_application
+        where id=#{id}
+    </delete>
+
+    <select id="findBySubTeacherId" parameterType="Long" resultMap="tab_share_seminar_application" resultType="com.rbs.project.pojo.entity.ShareSeminarApplication">
+        select id,main_course_id,sub_course_id,sub_course_teacher_id,status
+        from share_seminar_application
+        where sub_course_teacher_id=#{subTeacherId}
+    </select>
+</mapper>
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CClassSeminarMapper">
+    <resultMap id="tab_klass_seminar" type="com.rbs.project.pojo.entity.CClassSeminar">
+        <result property="id" column="id"/>
+        <result property="cClassId" column="klass_id"/>
+        <result property="seminarId" column="seminar_id"/>
+        <result property="reportDDL" column="report_ddl"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT id,klass_id,seminar_id,report_ddl,status
+        FROM klass_seminar
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByCClassId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT id,klass_id,seminar_id,report_ddl,status
+        FROM klass_seminar
+        WHERE klass_id=#{cClassId}
+    </select>
+
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT klass_seminar.*
+        FROM klass_seminar LEFT JOIN klass
+        ON klass_seminar.klass_id=klass.id
+        WHERE klass.course_id=#{courseId}
+    </select>
+
+    <select id="findBySeminarId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        select id,klass_id,seminar_id,report_ddl,status
+        from klass_seminar
+        where seminar_id=#{seminarId}
+    </select>
+
+    <select id="findByCClassIdAndSeminarId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT id,klass_id,seminar_id,report_ddl,status
+        FROM klass_seminar
+        WHERE klass_id=#{cClassId}
+          AND seminar_id=#{seminarId}
+    </select>
+
+    <update id="updateCClassSeminar" parameterType="com.rbs.project.pojo.entity.CClassSeminar">
+        update klass_seminar
+        set report_ddl=#{reportDDL},
+            status=#{status}
+        where klass_id=#{cClassId}
+          and seminar_id=#{seminarId}
+    </update>
+
+    <delete id="removeCClassSeminarBySeminarId" parameterType="Long">
+        delete
+        from klass_seminar
+        where seminar_id=#{seminarId}
+    </delete>
+
+    <insert id="insertCClassSeminar" parameterType="com.rbs.project.pojo.entity.CClassSeminar" useGeneratedKeys="true" keyProperty="id">
+        insert into klass_seminar(klass_id,seminar_id,report_ddl,status)
+        values (#{cClassId},#{seminarId},#{reportDDL},#{status})
+    </insert>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CClassTeamMapper">
+    <resultMap id="tab_klass_team" type="com.rbs.project.pojo.relationship.CClassTeam">
+        <result property="cClassId" column="klass_id"/>
+        <result property="teamId" column="team_id"/>
+    </resultMap>
+    <insert id="insertBycClassIdAndTeamId">
+      INSERT INTO klass_team(klass_id, team_id)
+      VALUES (#{cClassId},#{teamId})
+    </insert>
+
+    <delete id="deleteByTeamId" parameterType="Long">
+      DELETE FROM klass_team WHERE team_id=#{teamId}
+    </delete>
+
+    <delete id="deleteByCClassIdAndTeamId" parameterType="Long">
+        delete from klass_team
+        where klass_id=#{cClassId}
+          and team_id=#{teamId}
+    </delete>
+
+    <select id="findByTeamId" parameterType="Long" resultMap="tab_klass_team" resultType="com.rbs.project.pojo.relationship.CClassTeam">
+        select klass_id,team_id
+        from klass_team
+        where team_id=#{teamId}
+    </select>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.TeamValidApplicationMapper">
+    <resultMap id="tab_team_valid_application" type="com.rbs.project.pojo.entity.TeamValidApplication">
+        <result property="id" column="id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="reason" column="reason"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_team_valid_application">
+        SELECT id,team_id,teacher_id,reason,status
+        FROM team_valid_application
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByTeamIdAndTeacherId" parameterType="Long" resultMap="tab_team_valid_application">
+        SELECT id,team_id,teacher_id,reason,status
+        FROM team_valid_application
+        WHERE team_id=#{teamId} AND teacher_id=#{teacherId}
+    </select>
+
+    <select id="findByTeacherId" parameterType="Long" resultMap="tab_team_valid_application">
+        SELECT id,team_id,teacher_id,reason,status
+        FROM team_valid_application
+        WHERE teacher_id=#{teacherId}
+    </select>
+
+    <insert id="insertApplication" parameterType="com.rbs.project.pojo.entity.TeamValidApplication" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO team_valid_application(team_id, teacher_id, reason, status)
+        VALUES (#{teamId},#{teacherId},#{reason},#{status})
+    </insert>
+
+    <update id="updateStatusById">
+        UPDATE team_valid_application
+        SET status=#{status}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateReasonById">
+        UPDATE team_valid_application
+        SET reason=#{reason}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteByTeamId">
+        delete from team_valid_application
+        where team_id=#{teamId}
+    </delete>
+</mapper>

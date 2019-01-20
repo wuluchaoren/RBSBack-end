@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CClassMapper">
+    <resultMap id="tab_class" type="com.rbs.project.pojo.entity.CClass">
+        <result property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="grade" column="grade"/>
+        <result property="serial" column="klass_serial"/>
+        <result property="time" column="klass_time"/>
+        <result property="place" column="klass_location"/>
+    </resultMap>
+    <select id="findById" parameterType="Long" resultMap="tab_class" resultType="com.rbs.project.pojo.entity.CClass">
+        SELECT id,course_id,grade,klass_serial,klass_time,klass_location
+        FROM klass
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_class" resultType="com.rbs.project.pojo.entity.CClass">
+        SELECT id,course_id,grade,klass_serial,klass_time,klass_location
+        FROM klass
+        WHERE  course_id= #{courseId}
+    </select>
+
+    <select id="findByStudentIdAndCourseId" resultMap="tab_class">
+        SELECT id,klass.course_id,grade,klass_serial,klass_time,klass_location
+        FROM klass LEFT JOIN klass_student
+        ON klass.id=klass_student.klass_id
+        WHERE klass_student.student_id=#{studentId} AND klass_student.course_id=#{courseId}
+    </select>
+
+    <insert id="insertCClass" parameterType="com.rbs.project.pojo.entity.CClass" useGeneratedKeys="true" keyProperty="id">
+        insert into klass(course_id, grade,klass_serial,klass_time,klass_location)
+        values (#{courseId},#{grade},#{serial},#{time},#{place})
+    </insert>
+    <delete id="deleteCClassById" parameterType="Long">
+        delete
+        from klass
+        where id=#{id}
+    </delete>
+</mapper>

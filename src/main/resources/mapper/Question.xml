@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.QuestionMapper">
+    <resultMap id="tab_question" type="com.rbs.project.pojo.entity.Question">
+        <result property="id" column="id"/>
+        <result property="cClassSeminarId" column="klass_seminar_id"/>
+        <result property="attendanceId" column="attendance_id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="selected" column="is_selected"/>
+        <result property="score" column="score"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_question" resultType="com.rbs.project.pojo.entity.Question">
+        SELECT id,klass_seminar_id,attendance_id,team_id,student_id,is_selected,score
+        FROM question
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByCClassSeminarId" parameterType="Long" resultMap="tab_question" resultType="com.rbs.project.pojo.entity.Question">
+        select id,klass_seminar_id,attendance_id,team_id,student_id,is_selected,score
+        from question
+        where klass_seminar_id=#{cClassSeminarId}
+    </select>
+
+    <select id="findByPrimaryKeys" parameterType="Long" resultMap="tab_question" resultType="com.rbs.project.pojo.entity.Question">
+        select id,klass_seminar_id,attendance_id,team_id,student_id,is_selected,score
+        from question
+        where klass_seminar_id=#{cClassSeminarId}
+          and team_id=#{teamId}
+          and student_id=#{studentId}
+    </select>
+
+    <insert id="insertQuestion" parameterType="com.rbs.project.pojo.entity.Question" useGeneratedKeys="true" keyProperty="id">
+        insert into question(klass_seminar_id, attendance_id, team_id, student_id, is_selected, score)
+        values (#{cClassSeminarId},#{attendanceId},#{teamId},#{studentId},#{selected},#{score})
+    </insert>
+
+    <update id="updateQuestion" parameterType="com.rbs.project.pojo.entity.Question">
+        update question
+        set is_selected=#{selected},
+            score=#{score}
+        where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.SeminarMapper">
+    <resultMap id="tab_seminar" type="com.rbs.project.pojo.entity.Seminar">
+        <result property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="roundId" column="round_id"/>
+        <result property="name" column="seminar_name"/>
+        <result property="intro" column="introduction"/>
+        <result property="maxTeam" column="max_team"/>
+        <result property="visible" column="is_visible"/>
+        <result property="serial" column="seminar_serial"/>
+        <result property="enrollStartTime" column="enroll_start_time"/>
+        <result property="enrollEndTime" column="enroll_end_time"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
+        SELECT id,course_id,round_id,seminar_name,introduction,max_team,is_visible,seminar_serial,enroll_start_time,enroll_end_time
+        FROM seminar
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
+        SELECT id,course_id,round_id,seminar_name,introduction,max_team,is_visible,seminar_serial,enroll_start_time,enroll_end_time
+        FROM seminar
+        WHERE course_id=#{courseId}
+    </select>
+
+    <select id="findByRoundId" parameterType="Long" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
+        SELECT id,course_id,round_id,seminar_name,introduction,max_team,is_visible,seminar_serial,enroll_start_time,enroll_end_time
+        FROM seminar
+        WHERE round_id=#{roundId}
+    </select>
+
+    <insert id="insertSeminar" parameterType="com.rbs.project.pojo.entity.Seminar" useGeneratedKeys="true" keyProperty="id">
+        insert into seminar(course_id, round_id, seminar_name, introduction, max_team, is_visible,
+        seminar_serial, enroll_start_time, enroll_end_time)
+        values (#{courseId},#{roundId},#{name},#{intro},#{maxTeam},#{visible},#{serial},#{enrollStartTime},#{enrollEndTime})
+    </insert>
+
+    <delete id="removeSeminarById" parameterType="Long" >
+        delete
+        from seminar
+        where id=#{id}
+    </delete>
+
+    <update id="updateSeminar" parameterType="com.rbs.project.pojo.entity.Seminar">
+        update seminar
+        set seminar_name=#{name},
+            introduction=#{intro},
+            max_team=#{maxTeam},
+            is_visible=#{visible},
+            seminar_serial=#{serial},
+            enroll_start_time=#{enrollStartTime},
+            enroll_end_time=#{enrollEndTime}
+        where id=#{id}
+    </update>
+</mapper>

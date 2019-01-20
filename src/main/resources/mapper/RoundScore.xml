@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.RoundScoreMapper">
+    <resultMap id="tab_round_score" type="com.rbs.project.pojo.entity.RoundScore">
+        <result property="roundId" column="round_id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="presentationScore" column="presentation_score"/>
+        <result property="questionScore" column="question_score"/>
+        <result property="reportScore" column="report_score"/>
+    </resultMap>
+
+    <select id="findByRoundId" parameterType="Long" resultMap="tab_round_score">
+        SELECT round_id,team_id,total_score,presentation_score,question_score,report_score FROM round_score WHERE round_id=#{roundId}
+    </select>
+
+    <select id="findByRoundIdAndTeamId" parameterType="Long" resultMap="tab_round_score">
+        SELECT round_score.* FROM round_score WHERE round_id=#{roundId} AND team_id=#{teamId}
+    </select>
+
+    <insert id="insertRoundScore" parameterType="com.rbs.project.pojo.entity.RoundScore">
+        INSERT INTO round_score(round_id, team_id)
+        VALUES (#{roundId},#{teamId})
+    </insert>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM round_score
+        WHERE round_id=#{roundId} AND team_id=#{teamId}
+    </delete>
+
+    <delete id="deleteByTeamId">
+        delete from round_score
+        where team_id=#{teamId}
+    </delete>
+
+    <delete id="deleteByRoundId" parameterType="Long">
+        delete from round_score
+        where round_id=#{roundId}
+    </delete>
+
+    <update id="updatePresentationScore">
+        UPDATE round_score
+        SET presentation_score=#{presentationScore}
+        WHERE round_id=#{roundId} AND team_id=#{teamId}
+    </update>
+
+    <update id="updateQuestionScore">
+        UPDATE round_score
+        SET question_score=#{questionScore}
+        WHERE round_id=#{roundId} AND team_id=#{teamId}
+    </update>
+
+    <update id="updateReportScore">
+        UPDATE round_score
+        SET report_score=#{reportScore}
+        WHERE round_id=#{roundId} AND team_id=#{teamId}
+    </update>
+
+    <update id="updateTotalScore">
+        UPDATE round_score
+        SET total_score=#{totalScore}
+        WHERE round_id=#{roundId} AND team_id=#{teamId}
+    </update>
+</mapper>

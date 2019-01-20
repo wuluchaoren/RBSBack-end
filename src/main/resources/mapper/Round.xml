@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.RoundMapper">
+    <resultMap id="tab_round" type="com.rbs.project.pojo.entity.Round">
+        <result property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="serial" column="round_serial"/>
+        <result property="presentationScoreMethod" column="presentation_score_method"/>
+        <result property="reportScoreMethod" column="report_score_method"/>
+        <result property="questionScoreMethod" column="question_score_method"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_round" resultType="com.rbs.project.pojo.entity.Round">
+        SELECT id,course_id,round_serial,presentation_score_method,report_score_method,question_score_method
+        FROM round
+        WHERE id=#{id}
+    </select>
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_round" resultType="com.rbs.project.pojo.entity.Round">
+        SELECT id,course_id,round_serial,presentation_score_method,report_score_method,question_score_method
+        FROM round
+        WHERE course_id=#{courseId}
+    </select>
+
+    <insert id="insertRound" parameterType="com.rbs.project.pojo.entity.Round" useGeneratedKeys="true" keyProperty="id">
+        insert into round(course_id,round_serial,presentation_score_method,report_score_method,question_score_method)
+        values (#{courseId},#{serial},#{presentationScoreMethod},#{reportScoreMethod},#{questionScoreMethod})
+    </insert>
+
+    <update id="updateScoreMethod" parameterType="com.rbs.project.pojo.entity.Round">
+        update round
+        set report_score_method=#{reportScoreMethod},
+            presentation_score_method=#{presentationScoreMethod},
+            question_score_method=#{questionScoreMethod}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete
+        from round
+        where id=#{id}
+    </delete>
+
+    <select id="findByCourseIdAndSerial"  resultMap="tab_round" resultType="com.rbs.project.pojo.entity.Round">
+        select id,course_id,round_serial,presentation_score_method,report_score_method,question_score_method
+        from round
+        where course_id=#{courseId}
+          and round_serial=#{serial}
+    </select>
+</mapper>

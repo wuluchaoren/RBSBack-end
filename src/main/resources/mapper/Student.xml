@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.StudentMapper">
+    <resultMap id="tab_student" type="com.rbs.project.pojo.entity.Student">
+        <result property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="active" column="is_active"/>
+        <result property="studentName" column="student_name"/>
+        <result property="email" column="email"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email FROM student WHERE id = #{id}
+    </select>
+
+    <select id="findByAccount" parameterType="String" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email FROM student WHERE account = #{account}
+    </select>
+
+    <select id="listAll" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email FROM student
+    </select>
+
+    <select id="findByStudentName" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email FROM student WHERE student_name=#{studentName}
+    </select>
+
+    <select id="findByTeamId" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email
+        FROM student LEFT JOIN team_student
+          ON student.id=team_student.student_id
+        WHERE team_student.team_id=#{teamId}
+    </select>
+
+    <!--没问题-->
+    <select id="findByCourseId" resultMap="tab_student">
+        SELECT student.id,student.account,student.password,student.is_active,student.student_name,student.email
+        FROM klass_student LEFT JOIN student
+        ON klass_student.student_id=student.id
+        WHERE klass_student.course_id=#{courseId}
+    </select>
+
+    <!--获取一个课程下有队伍的学生-->
+    <select id="findByCourseIdHasTeam" resultMap="tab_student">
+        select student.*
+	    from klass left join klass_team
+	      on klass.id=klass_team.klass_id
+	    left join team_student
+	      on klass_team.team_id=team_student.team_id
+	    left join student
+	      on team_student.student_id=student.id
+	    where klass.course_id=#{courseId};
+    </select>
+
+    <!--获取team下属于courseId的学生-->
+    <select id="findByCourseIdAndTeamId" resultMap="tab_student">
+        SELECT student.*
+        FROM klass LEFT JOIN klass_team
+          ON klass.id=klass_team.klass_id
+        LEFT JOIN team_student
+          ON klass_team.team_id=team_student.team_id
+        LEFT join student
+          ON team_student.student_id=student.id
+        WHERE klass.course_id=#{courseId} AND team_student.team_id=#{teamId}
+    </select>
+
+    <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET password=#{password},email=#{email},is_active=#{active}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updatePasswordById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET password=#{password}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateEmailById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET email=#{email}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into student(account,password,is_active,student_name,email)
+        values (#{account},#{password},#{active},#{studentName},#{email})
+    </insert>
+
+    <update id="updateStudentNameById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET student_name=#{studentName}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateAccountById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET account=#{account}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteStudentById" parameterType="Long">
+        DELETE FROM student WHERE id=#{id}
+    </delete>
+
+</mapper>

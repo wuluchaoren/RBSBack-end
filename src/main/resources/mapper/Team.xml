@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.TeamMapper">
+    <resultMap id="tab_team" type="com.rbs.project.pojo.entity.Team">
+        <result property="id" column="id"/>
+        <result property="cClassId" column="klass_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="leaderId" column="leader_id"/>
+        <result property="name" column="team_name"/>
+        <result property="serial" column="team_serial"/>
+        <result property="status" column="status"/>
+
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
+        FROM team
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByLeaderId" parameterType="Long" resultMap="tab_team">
+        SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
+        FROM team
+        WHERE leader_id=#{leaderId}
+    </select>
+
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        select team.id,team.klass_id,team.course_id,team.leader_id,team.team_name,team.team_serial,team.status
+        from team LEFT JOIN klass_team
+        ON team.id=klass_team.team_id
+        LEFT JOIN klass
+        ON klass_team.klass_id=klass.id
+        LEFT JOIN course
+        ON klass.course_id=course.id
+        where course.id=#{courseId}
+    </select>
+
+    <select id="findByCClassId" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT team.id,team.klass_id,team.course_id,team.leader_id,team.team_name,team.team_serial,team.status
+        FROM klass_team LEFT JOIN team
+        ON klass_team.team_id=team.id
+        WHERE klass_team.klass_id=#{cClassId}
+    </select>
+
+    <select id="getTeamBycClassIdAndStudentId" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT team.id,team.klass_id,team.course_id,team.leader_id,team.team_name,team.team_serial,team.status
+        FROM team LEFT JOIN team_student
+        ON team.id=team_student.team_id
+        LEFT JOIN klass_team
+        ON team.id=klass_team.team_id
+        WHERE klass_team.klass_id=#{cClassId} AND team_student.student_id=#{studentId}
+    </select>
+
+    <insert id="insertTeam" parameterType="com.rbs.project.pojo.entity.Team" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO team(klass_id, course_id, leader_id, team_name, team_serial, status)
+        VALUES (#{cClassId},#{courseId},#{leaderId},#{name},#{serial},#{status})
+    </insert>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM team WHERE id=#{teamId}
+    </delete>
+
+    <update id="updateStatusById">
+        UPDATE team SET status=#{status}
+        WHERE id=#{id}
+    </update>
+
+</mapper>

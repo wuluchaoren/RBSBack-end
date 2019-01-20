@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CClassStudentMapper">
+    <resultMap id="tab_klass_student" type="com.rbs.project.pojo.relationship.CClassStudent">
+        <result property="cClassId" column="klass_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="teamId" column="team_id"/>
+    </resultMap>
+
+    <insert id="insertCClassStudent" parameterType="com.rbs.project.pojo.relationship.CClassStudent">
+      insert into klass_student(klass_id, student_id, course_id)
+      values (#{cClassId},#{studentId},#{courseId})
+    </insert>
+
+
+    <select id="getTeamIdByPrimaryKeys" resultType="Long">
+        SELECT team_id FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
+    </select>
+
+    <select id="getByPrimaryKeys" resultType="Object">
+        SELECT * FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
+    </select>
+
+    <select id="getStudentIdByTeamId" parameterType="Long" resultType="Long">
+        SELECT student_id from klass_student WHERE team_id=#{teamId}
+    </select>
+
+    <update id="updateTeamIdByPrimaryKeys">
+        UPDATE klass_student SET team_id=#{teamId}
+        WHERE klass_id=#{cClassId} AND student_id=#{studentId}
+    </update>
+
+    <update id="updateTeamIdCollectionToNull">
+        update klass_student
+        set team_id= replace(team_id,#{teamId},null)
+    </update>
+
+    <select id="getByIdAndCourseId" parameterType="Long" resultType="com.rbs.project.pojo.relationship.CClassStudent" resultMap="tab_klass_student">
+        select klass_id,student_id,course_id,team_id
+        from klass_student
+        where student_id=#{studentId}
+          and course_id=#{courseId}
+    </select>
+
+</mapper>

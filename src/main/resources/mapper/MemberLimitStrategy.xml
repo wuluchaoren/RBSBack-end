@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.strategy.MemberLimitStrategyMapper">
+    <resultMap id="tab_member_limit_strategy" type="com.rbs.project.pojo.strategy.MemberLimitStrategy">
+        <result property="id" column="id"/>
+        <result property="minMember" column="min_member"/>
+        <result property="maxMember" column="max_member"/>
+    </resultMap>
+
+    <select id="findById" parameterType="Long" resultMap="tab_member_limit_strategy">
+        SELECT * FROM member_limit_strategy WHERE id=#{id}
+    </select>
+
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.MemberLimitStrategy"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        member_limit_strategy(min_member, max_member)
+        VALUES
+        (#{minMember},#{maxMember})
+    </insert>
+
+</mapper>

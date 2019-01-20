@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper">
+    <resultMap id="tab_course_member_limit_strategy" type="com.rbs.project.pojo.strategy.CourseMemberLimitStrategy">
+        <result property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="minMember" column="min_member"/>
+        <result property="maxMember" column="max_member"/>
+    </resultMap>
+
+    <select id="getByCourseId" parameterType="Long" resultMap="tab_course_member_limit_strategy">
+        SELECT id,course_id,min_member,max_member FROM course_member_limit_strategy WHERE course_id=#{courseId}
+    </select>
+
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.CourseMemberLimitStrategy"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        course_member_limit_strategy(course_id, min_member, max_member)
+        VALUES
+        (#{courseId},#{minMember},#{maxMember})
+    </insert>
+
+    <delete id="deleteByCourseId" parameterType="Long">
+        DELETE FROM course_member_limit_strategy WHERE course_id=#{courseId}
+    </delete>
+
+    <select id="findById" parameterType="Long" resultMap="tab_course_member_limit_strategy">
+        SELECT * FROM course_member_limit_strategy WHERE id=#{id}
+    </select>
+
+</mapper>
